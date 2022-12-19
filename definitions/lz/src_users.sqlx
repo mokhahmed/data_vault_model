@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  schema: "dv_demo",
+  name: "src_users",
+  description: "External table for users data source"
+}
