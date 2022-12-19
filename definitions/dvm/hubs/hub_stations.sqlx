@@ -1,0 +1,19 @@
+
+config {
+  type: "table",
+  schema: "dvm",
+  name: "hub_stations",
+  columns: dv_models.stations_model_doc,
+  description: "hub station table",
+  uniqueKey: ["station_hash_id"],
+  tags: ["datavault"]
+}
+
+${
+    dvm.get_hub(
+        dv_models.stations_model,
+        ref("src_stations"),
+        "src_stations",
+        "station_hash_id"
+    )
+}

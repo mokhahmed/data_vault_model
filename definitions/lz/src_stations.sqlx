@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  schema: "dv_demo",
+  name: "src_stations",
+  description: "External table for stations data source"
+}

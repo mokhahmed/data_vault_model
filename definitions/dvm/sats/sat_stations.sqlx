@@ -1,0 +1,21 @@
+
+config {
+  type: "table",
+  schema: "dvm",
+  name: "sat_stations",
+  columns: dv_models.stations_model_doc,
+  description: "satellite stations table",
+  uniqueKey: ["station_hash_id", "hash_diff"],
+  tags: ["datavault"]
+}
+
+${
+    dvm.get_sat(
+        dv_models.stations_model,
+        ref("src_stations"),
+        ref("hub_stations"),
+        "hub_stations",
+        "trip_hash_id"
+    )
+}
+

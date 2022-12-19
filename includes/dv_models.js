@@ -156,11 +156,198 @@ var trips_model = [
 var trips_model_doc  = {}
 trips_model.forEach(el => { trips_model_doc[el.target_column_name+""] = el.description});
 
+var stations_model =  [
+ {
+    "source_column_name": "station_id",
+    "source_data_type": "integer",
+    "target_column_name": "station_id",
+    "target_data_type": "integer",
+    "is_key": "Y", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Unique identifier of a station."
+  },
+  {
+    "source_column_name": "name",
+    "source_data_type": "string",
+    "target_column_name": "name",
+    "target_data_type": "string",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Public name of the station."
+  },
+  {
+    "source_column_name": "short_name",
+    "source_data_type": "string",
+    "target_column_name": "short_name",
+    "target_data_type": "string",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Short name or other type of identifier, as used by the data publisher."
+  },
+  {
+    "source_column_name": "latitude",
+    "source_data_type": "float",
+    "target_column_name": "latitude",
+    "target_data_type": "float",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "The latitude of station. The field value must be a valid WGS 84 latitude in decimal degrees format."
+  },
+  {
+    "source_column_name": "longitude",
+    "source_data_type": "float",
+    "target_column_name": "longitude",
+    "target_data_type": "float",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "The longitude of station. The field value must be a valid WGS 84 longitude in decimal degrees format."
+  },
+   {
+    "source_column_name": "region_id",
+    "source_data_type": "integer",
+    "target_column_name": "region_id",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "ID of the region where station is located."
+  },
+  {
+    "source_column_name": "rental_methods",
+    "source_data_type": "string",
+    "target_column_name": "rental_methods",
+    "target_data_type": "string",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Array of enumerables containing the payment methods accepted at this station."
+  },
+  {
+    "source_column_name": "capacity",
+    "source_data_type": "integer",
+    "target_column_name": "capacity",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "A Number of total docking points installed at this station, both available and unavailable."
+  },
+  {
+    "source_column_name": "eightd_has_key_dispenser	",
+    "source_data_type": "boolean",
+    "target_column_name": "eightd_has_key_dispenser	",
+    "target_data_type": "boolean",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": ""
+  },
+  {
+    "source_column_name": "num_bikes_available",
+    "source_data_type": "integer",
+    "target_column_name": "num_bikes_available",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Number of bikes available for rental."
+  },
+  {
+    "source_column_name": "num_bikes_disabled",
+    "source_data_type": "integer",
+    "target_column_name": "num_bikes_disabled",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Number of disabled bikes at the station."
+  },
+  {
+    "source_column_name": "num_docks_available",
+    "source_data_type": "integer",
+    "target_column_name": "num_docks_available",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Number of docks accepting bike returns."
+  },
+  {
+    "source_column_name": "num_docks_disabled",
+    "source_data_type": "integer",
+    "target_column_name": "num_docks_disabled",
+    "target_data_type": "integer",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Number of empty but disabled dock points at the station."
+  },
+  {
+    "source_column_name": "is_installed",
+    "source_data_type": "boolean",
+    "target_column_name": "is_installed",
+    "target_data_type": "boolean",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Is the station currently on the street?"
+  }, {
+    "source_column_name": "is_renting",
+    "source_data_type": "boolean",
+    "target_column_name": "is_renting",
+    "target_data_type": "boolean",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Is the station currently renting bikes?"
+  },
+  {
+    "source_column_name": "is_returning",
+    "source_data_type": "boolean",
+    "target_column_name": "is_returning",
+    "target_data_type": "boolean",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Is the station accepting bike returns?"
+  },
+  {
+    "source_column_name": "eightd_has_available_keys",
+    "source_data_type": "boolean",
+    "target_column_name": "eightd_has_available_keys",
+    "target_data_type": "boolean",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": ""
+  },
+  {
+    "source_column_name": "last_reported",
+    "source_data_type": "datetime",
+    "target_column_name": "last_reported",
+    "target_data_type": "datetime",
+    "is_key": "N", 
+    "is_calculated": "N",
+    "calculated_by": "",
+    "description": "Timestamp indicating the last time this station reported its status to the backend, in NYC local time."
+  },
+]
+
+var stations_model_doc  = {}
+stations_model.forEach(el => { stations_model_doc[el.target_column_name+""] = el.description});
+
 module.exports = {
   users_model,
   users_model_doc,
   bikes_model,
   bikes_model_doc,
   trips_model,
-  trips_model_doc
+  trips_model_doc,
+  stations_model,
+  stations_model_doc
 }
