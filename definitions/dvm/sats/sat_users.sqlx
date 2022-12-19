@@ -1,6 +1,6 @@
 
 config {
-  type: "incremental",
+  type: "table",
   schema: "dvm",
   name: "sat_users",
   columns: dv_models.users_model_doc,

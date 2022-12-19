@@ -1,0 +1,19 @@
+
+config {
+  type: "table",
+  schema: "dvm",
+  name: "hub_trips",
+  columns: dv_models.trips_model_doc,
+  description: "hub trips table",
+  uniqueKey: ["trip_hash_id"],
+  tags: ["datavault"]
+}
+
+${
+    dvm.get_hub(
+        dv_models.trips_model,
+        ref("src_trips"),
+        "src_trips",
+        "trip_hash_id"
+    )
+}

@@ -1,6 +1,6 @@
 
 config {
-  type: "incremental",
+  type: "table",
   schema: "dvm",
   name: "hub_users",
   columns: dv_models.users_model_doc,

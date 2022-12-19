@@ -1,0 +1,19 @@
+
+config {
+  type: "table",
+  schema: "dvm",
+  name: "hub_bikes",
+  columns: dv_models.bikes_model_doc,
+  description: "hub bikes table",
+  uniqueKey: ["bike_hash_id"],
+  tags: ["datavault"]
+}
+
+${
+    dvm.get_hub(
+        dv_models.bikes_model,
+        ref("src_bikes"),
+        "src_bikes",
+        "bike_hash_id"
+    )
+}
