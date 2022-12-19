@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  schema: "dv_demo",
+  name: "src_trips",
+  description: "External table for trips data source"
+}

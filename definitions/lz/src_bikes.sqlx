@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  schema: "dv_demo",
+  name: "src_bikes",
+  description: "External table for bikes data source"
+}
