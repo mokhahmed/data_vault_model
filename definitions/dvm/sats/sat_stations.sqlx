@@ -15,7 +15,7 @@ ${
         ref("src_stations"),
         ref("hub_stations"),
         "hub_stations",
-        "trip_hash_id"
+        "station_hash_id"
     )
 }
 
