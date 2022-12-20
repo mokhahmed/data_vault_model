@@ -6,14 +6,9 @@ config {
   columns: dv_models.users_model_doc,
   description: "hub users table",
   uniqueKey: ["user_hash_id"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
-    dvm.get_hub(
-        dv_models.users_model,
-        ref("src_users"),
-        "src_users",
-        "user_hash_id"
-    )
+    dvm.get_hub(dv_models.users_model, ref("src_users"), "user_hash_id")
 }

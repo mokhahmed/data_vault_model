@@ -6,16 +6,10 @@ config {
   columns: dv_models.bikes_model_doc,
   description: "satellite bikes table",
   uniqueKey: ["bike_hash_id", "hash_diff"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
-    dvm.get_sat(
-        dv_models.bikes_model,
-        ref("src_bikes"),
-        ref("hub_bikes"),
-        "src_bikes",
-        "bike_hash_id"
-    )
+    dvm.get_sat( dv_models.bikes_model, ref("src_bikes"), ref("hub_bikes"), "bike_hash_id")
 }
 

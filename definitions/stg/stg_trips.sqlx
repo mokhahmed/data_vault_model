@@ -1,0 +1,17 @@
+config {
+  type: "incremental",
+  schema: "stg_citibike",
+  name: "stg_trips",
+  description: "Cleaned up data for trips data source",
+  columns: dv_models.trips_model_doc,
+  tags: ["stage"],
+   bigquery: {
+    partitionBy: "DATE(load_time)",
+    clusterBy: ["job_id"]
+  }
+}
+
+
+${
+  dvm.get_stage_table("job_id_1", ref("src_trips"), dv_models.trips_model)
+}

@@ -4,7 +4,7 @@ config {
   name: "link_users_bikes",
   description: "users' bikes link table",
   uniqueKey: ["user_bike_hash_id"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
@@ -14,7 +14,6 @@ ${
         ref("src_trips"),
         ref("hub_users"),
         ref("hub_bikes"),
-        "src_trips",
         "user_hash_id",
         "bike_hash_id",
         "user_bike_hash_id"

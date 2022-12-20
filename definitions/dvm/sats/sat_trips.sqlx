@@ -6,16 +6,10 @@ config {
   columns: dv_models.trips_model_doc,
   description: "satellite trips table",
   uniqueKey: ["trip_hash_id", "hash_diff"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
-    dvm.get_sat(
-        dv_models.trips_model,
-        ref("src_trips"),
-        ref("hub_trips"),
-        "src_trips",
-        "trip_hash_id"
-    )
+    dvm.get_sat(dv_models.trips_model, ref("src_trips"), ref("hub_trips"), "trip_hash_id")
 }
 

@@ -6,14 +6,9 @@ config {
   columns: dv_models.trips_model_doc,
   description: "hub trips table",
   uniqueKey: ["trip_hash_id"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
-    dvm.get_hub(
-        dv_models.trips_model,
-        ref("src_trips"),
-        "src_trips",
-        "trip_hash_id"
-    )
+    dvm.get_hub(dv_models.trips_model,ref("src_trips"),"trip_hash_id")
 }

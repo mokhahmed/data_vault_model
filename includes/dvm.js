@@ -31,7 +31,7 @@ function format_column_sql(config){
 }
 
 
-function render_transformed_cols(config){
+function get_transformed_cols(config){
     return `
         ${config.map( x => format_column_sql(x) ).reduce( (x,y) => `${x},${y}`)}
     `;
@@ -54,7 +54,7 @@ function are_not_empty(cols){
     return cols.map(x => is_not_empty(x.source_column_name)).reduce((x,y) => `${x} and ${y}`);
 }
 
-function get_hub(config, source_table, source_name, hub_key){
+function get_hub(config, source_table, hub_key){
 
     var hub_config = config.filter(x => x.is_key.toLowerCase() == "y");
     var hub_cols = hub_config.map(x => x.source_column_name);
@@ -66,7 +66,7 @@ function get_hub(config, source_table, source_name, hub_key){
         select distinct 
         ${hub_hash_id} as ${hub_key},
         ${cols},
-        '${source_name}' as source,
+        '${source_table}' as source,
         CURRENT_TIMESTAMP() as load_time
         from ${source_table} stg
         where ${where_clause}
@@ -74,7 +74,7 @@ function get_hub(config, source_table, source_name, hub_key){
 
 }
 
-function get_sat(config, source_table, hub_table, source_name, hub_key){
+function get_sat(config, source_table, hub_table, hub_key){
 
     var hub_config = config.filter(x => x.is_key.toLowerCase() == "y");
     var sat_config = config.filter(x => x.is_key.toLowerCase() == "n");
@@ -88,7 +88,7 @@ function get_sat(config, source_table, hub_table, source_name, hub_key){
         hub.${hub_key} as ${hub_key},
         ${hash_diff} as hash_diff,
         ${cols},
-        '${source_name}' as source,
+        '${source_table}' as source,
         CURRENT_TIMESTAMP() as load_time
         from ${source_table} stg join ${hub_table} hub
         on ${join_clause}
@@ -96,8 +96,7 @@ function get_sat(config, source_table, hub_table, source_name, hub_key){
 
 }
 
-function get_link(config_1, config_2, source_table, hub_table_1, hub_table_2, 
-                    source_name, hub_key_1, hub_key_2,  link_key){
+function get_link(config_1, config_2, source_table, hub_table_1, hub_table_2,hub_key_1, hub_key_2,  link_key){
 
     var link_hash = to_hash([hub_key_1, hub_key_2])
 
@@ -119,7 +118,7 @@ function get_link(config_1, config_2, source_table, hub_table_1, hub_table_2,
         ${link_hash} as ${link_key}, 
         ${hub_key_1},
         ${hub_key_2},
-        "${source_name}" as source,
+        "${source_table}" as source,
         CURRENT_TIMESTAMP() as load_time
         from (
             select distinct 
@@ -138,11 +137,32 @@ function render_target_cols(config){
     `;
 }
 
+function get_landing_files(source_table_name){
+    return `
+        select 
+            distinct lower(trim(_file_name)) as file_name
+        from
+        ${source_table_name}
+    `
+}
 
+function get_stage_table(job_id, table_name, table_model){
+   cols = get_transformed_cols(table_model)
+   return ` 
+    select
+       '${job_id}' as job_id,
+       current_timestamp() as load_time,
+       _file_name as file_name,
+       ${cols}
+    from ${table_name}
+    `
+}
 
 module.exports = {
+  get_landing_files,
+  get_stage_table,
   to_timestamp,
-  render_transformed_cols,
+  get_transformed_cols,
   to_hash,
   render_target_cols,
   get_hub,

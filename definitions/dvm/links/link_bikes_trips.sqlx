@@ -4,7 +4,7 @@ config {
   name: "link_bikes_trips",
   description: "bikes trips link table",
   uniqueKey: ["bike_trip_hash_id"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
 ${
@@ -14,7 +14,6 @@ ${
         ref("src_trips"),
         ref("hub_bikes"),
         ref("hub_trips"),
-        "src_trips",
         "bike_hash_id",
         "trip_hash_id",
         "bike_trip_hash_id"

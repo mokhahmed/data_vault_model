@@ -6,16 +6,10 @@ config {
   columns: dv_models.stations_model_doc,
   description: "satellite stations table",
   uniqueKey: ["station_hash_id", "hash_diff"],
-  tags: ["datavault"]
+  tags: ["data-vault"]
 }
 
-${
-    dvm.get_sat(
-        dv_models.stations_model,
-        ref("src_stations"),
-        ref("hub_stations"),
-        "hub_stations",
-        "station_hash_id"
-    )
+${ 
+  dvm.get_sat(dv_models.stations_model, ref("src_stations"), ref("hub_stations"), "station_hash_id")
 }
 

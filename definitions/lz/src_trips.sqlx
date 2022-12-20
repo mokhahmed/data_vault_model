@@ -1,6 +1,6 @@
 config {
   type: "declaration",
-  schema: "dv_demo",
+  schema: "lz_citibike",
   name: "src_trips",
   description: "External table for trips data source"
 }

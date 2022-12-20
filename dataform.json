@@ -3,6 +3,9 @@
   "assertionSchema": "dv_citybike_assertions",
   "warehouse": "bigquery",
   "defaultDatabase": "ma-sabre-sandbox-01",
-  "defaultLocation": "US"
+  "defaultLocation": "US",
+  "vars": {
+    "jobId": ""
+  }
 }
     
