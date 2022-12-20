@@ -158,6 +158,37 @@ function get_stage_table(job_id, table_name, table_model){
     `
 }
 
+function create_staging_tables(job_id, staging_tables){
+
+    staging_tables.forEach( tbl => 
+        publish(tbl.target, {
+            type: "incremental",
+            schema: tbl.schema_name,
+            description: `Cleaned up data for  ${tbl.target} data source`,
+            columns: tbl.model_doc,
+            tags: ["stage"],
+            bigquery: {
+            partitionBy: "DATE(load_time)",
+            clusterBy: ["job_id"]
+            }
+        }).query(ctx => `
+            ${ 
+            dvm.get_stage_table(job_id, ctx.ref(tbl.source), tbl.model)
+            } `
+        )
+    )
+
+}
+
+function create_src_tables(source_tables){
+    source_tables.forEach(tbl => declare({
+      schema: tbl.schema,
+      name: tbl.name
+    })
+  );
+
+}
+
 module.exports = {
   get_landing_files,
   get_stage_table,
@@ -167,5 +198,7 @@ module.exports = {
   render_target_cols,
   get_hub,
   get_sat,
-  get_link
+  get_link,
+  create_staging_tables,
+  create_src_tables
 };
