@@ -102,15 +102,17 @@ function get_link(config_1, config_2, source_table, hub_table_1, hub_table_2,
     var link_hash = to_hash([hub_key_1, hub_key_2])
 
     var hub_config_1 = config_1.filter(x => x.is_key.toLowerCase() == "y");
-    var cols_1 = hub_config_1.map( x => format_column_sql(x) ).reduce( (x,y) => `${x},${y}`);
+    var cols_1 = hub_config_1.map( x => format_column_sql(x) )//.reduce( (x,y) => `${x},${y}`);
     var where_clause_1 = hub_config_1.map(x => is_not_empty(x.source_column_name)).reduce((x,y) => `${x} and ${y}`);
     var join_clause_1 = hub_config_1.map(x => "hub1."+x.target_column_name +" = a."+ x.source_column_name).reduce((x,y) => `${x} and ${y}`);
 
     var hub_config_2 = config_2.filter(x => x.is_key.toLowerCase() == "y");
-    var cols_2 = hub_config_2.map( x => format_column_sql(x) ).reduce( (x,y) => `${x},${y}`);
+    var cols_2 = hub_config_2.map( x => format_column_sql(x) )//.reduce( (x,y) => `${x},${y}`);
     var where_clause_2 = hub_config_2.map(x => is_not_empty(x.source_column_name)).reduce((x,y) => `${x} and ${y}`);
     var join_clause_2 = hub_config_2.map(x => "hub2."+x.target_column_name +" = a."+ x.source_column_name).reduce((x,y) => `${x} and ${y}`);
     
+    var cols = cols_1.concat(cols_2)
+    var unique_cols = [... new Set(cols)]
 
     return `
         select
@@ -121,8 +123,7 @@ function get_link(config_1, config_2, source_table, hub_table_1, hub_table_2,
         CURRENT_TIMESTAMP() as load_time
         from (
             select distinct 
-                ${cols_1},
-                ${cols_2},
+                ${unique_cols}
             from ${source_table}  stg
             where  ${where_clause_1} and ${where_clause_2}
         ) a 

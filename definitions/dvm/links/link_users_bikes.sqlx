@@ -1,0 +1,23 @@
+config {
+  type: "table",
+  schema: "dvm",
+  name: "link_users_bikes",
+  description: "users' bikes link table",
+  uniqueKey: ["user_bike_hash_id"],
+  tags: ["datavault"]
+}
+
+${
+    dvm.get_link(
+        dv_models.users_model,
+        dv_models.bikes_model,
+        ref("src_trips"),
+        ref("hub_users"),
+        ref("hub_bikes"),
+        "src_trips",
+        "user_hash_id",
+        "bike_hash_id",
+        "user_bike_hash_id"
+    )
+}
+  
