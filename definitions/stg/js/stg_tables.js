@@ -1,5 +1,5 @@
 load_id= "load_id_1234"
-schema_name= "citibike_staging"
+schema_name= "citibike_stage"
 source_tables_prefix= "src_"
 target_tables_prefix= "stg_js_"
 tables_type = "incremental"
