@@ -4,7 +4,7 @@ config {
   name: "stg_users",
   description: "Cleaned up data for users data source",
   columns: models.users.columns_descriptions,
-  tags: ["stage"],
+  tags: ["stage-sql"],
    bigquery: {
     partitionBy: "DATE(load_time)",
     clusterBy: ["job_id"]

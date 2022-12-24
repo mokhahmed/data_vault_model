@@ -238,6 +238,32 @@ function create_satellites_tables(target_tables_prefix, source_tables_prefix, hu
 
 }
 
+function create_links_tables (source_tables_prefix, hubs_tables_prefix, target_tables_prefix, table_type, schema_name, links_tables){
+    links_tables.forEach( lnk => 
+    publish(`${target_tables_prefix}${lnk.hub1.name}_${lnk.hub2.name}`, {
+        type: table_type,
+        schema: schema_name,
+        description: `Link for ${lnk.hub1.name} ${lnk.hub2.name} table`,
+        uniqueKey: [`${lnk.hub1.name}${lnk.hub2.name}_hash_id` , "hash_diff"],
+        tags: ["data-vault", "links"]
+    })
+    .query(ctx => `
+        ${ 
+        dvform.get_link(
+            lnk.hub1.columns,
+            lnk.hub2.columns,
+            ctx.ref(`${source_tables_prefix}${lnk.source.name}`),
+            ctx.ref(`${hubs_tables_prefix}${lnk.hub1.name}`),
+            ctx.ref(`${hubs_tables_prefix}${lnk.hub2.name}`),
+            `${lnk.hub1.name}_hash_id`,
+            `${lnk.hub2.name}_hash_id`,
+            `${lnk.hub1.name}_${lnk.hub2.name}_hash_id`
+        )
+        }
+    `)
+    )
+}
+
 module.exports = {
   get_landing_files,
   get_stage_table,
@@ -248,8 +274,9 @@ module.exports = {
   get_hub,
   get_sat,
   get_link,
-  create_staging_tables,
   create_source_tables,
+  create_staging_tables,
   create_hubs_tables,
-  create_satellites_tables
+  create_satellites_tables,
+  create_links_tables
 };
