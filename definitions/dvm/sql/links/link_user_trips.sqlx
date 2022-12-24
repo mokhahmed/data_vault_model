@@ -1,22 +1,22 @@
 config {
-  type: "table",
-  schema: "dvm",
-  name: "link_users_trips",
+  type: "incremental",
+  schema: "citibike_sql_dvm",
+  name: "link_sql_users_trips",
   description: "users' trips link table",
-  uniqueKey: ["user_trip_hash_id"],
-  tags: ["data-vault"]
+  uniqueKey: ["users_trips_hash_id"],
+  tags: ["data-vault-sql"]
 }
 
 ${
     dvform.get_link(
         models.users.columns,
         models.trips.columns,
-        ref("src_trips"),
-        ref("hub_users"),
-        ref("hub_trips"),
-        "user_hash_id",
-        "trip_hash_id",
-        "user_trip_hash_id"
+        ref("stg_sql_trips"),
+        ref("hub_sql_users"),
+        ref("hub_sql_trips"),
+        "users_hash_id",
+        "trips_hash_id",
+        "users_trip_hash_id"
     )
 }
   

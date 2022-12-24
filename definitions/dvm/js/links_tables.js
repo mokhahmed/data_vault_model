@@ -1,7 +1,7 @@
 source_tables_prefix="stg_js_"
 hubs_tables_prefix = "hub_js_"
 target_tables_prefix = "link_js_"
-table_type= "table"
+table_type= "incremental"
 schema_name= "citibike_dvm"
 links_tables= [
   { 

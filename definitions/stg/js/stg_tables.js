@@ -1,4 +1,4 @@
-load_id= "load_id_1234"
+load_id= dataform.projectConfig.vars.load_id
 schema_name= "citibike_stage"
 source_tables_prefix= "src_"
 target_tables_prefix= "stg_js_"

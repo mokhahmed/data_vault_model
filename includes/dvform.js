@@ -186,7 +186,7 @@ function create_source_tables(schema_name, tables_prefix, source_tables){
     source_tables.forEach(tbl => 
         declare({
             schema: schema_name,
-            name: `${tables_prefix}_${tbl.name}`
+            name: `${tables_prefix}${tbl.name}`
         })
     )
 }

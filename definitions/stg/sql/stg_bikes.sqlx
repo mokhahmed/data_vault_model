@@ -1,10 +1,10 @@
 config {
   type: "incremental",
-  schema: "citibike_stage",
+  schema: "citibike_stage_sql",
   name: "stg_sql_bikes",
   description: "Cleaned up data for bikes data source",
   columns: models.bikes.columns_descriptions,
-  tags: ["stage", "sql"],
+  tags: ["stage-sql"],
    bigquery: {
     partitionBy: "DATE(load_time)",
     clusterBy: ["load_id"]
@@ -13,5 +13,9 @@ config {
 
 
 ${
-  dvform.get_stage_table("load_id_1234", ref("src_bikes"), models.bikes.columns)
+  dvform.get_stage_table(
+    dataform.projectConfig.vars.load_id, 
+    ref("src_sql_bikes"), 
+    models.bikes.columns
+  )
 }

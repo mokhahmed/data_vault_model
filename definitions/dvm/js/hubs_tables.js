@@ -1,6 +1,6 @@
 hubs_tables = models.get_all()
 target_tables_prefix = "hub_js_"
-table_type = "table",
+table_type = "incremental",
 schema_name = "citibike_dvm"
 source_tables_prefix="stg_js_"
 

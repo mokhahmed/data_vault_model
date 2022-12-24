@@ -1,4 +1,4 @@
-schema_name = "lz_citibike"
+schema_name = "citibike_source"
 tables_prefix = "src_"
 sources_tables = models.get_all()
 
