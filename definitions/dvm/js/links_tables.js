@@ -5,9 +5,9 @@ table_type= "incremental"
 schema_name= "citibike_dvm"
 links_tables= [
   { 
-    source: models.trips, 
-    hub1: models.bikes, 
-    hub2: models.trips
+    'source': models.trips, 
+    'hub1': models.bikes, 
+    'hub2': models.trips
   }
 ]
 

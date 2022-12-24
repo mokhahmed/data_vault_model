@@ -302,5 +302,6 @@ module.exports = {
   create_staging_tables,
   create_hubs_tables,
   create_satellites_tables,
-  create_links_tables
+  create_links_tables,
+  create_data_vault_from_model
 };
