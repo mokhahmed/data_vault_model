@@ -158,8 +158,18 @@ function get_stage_table(load_id, table_name, table_model){
     `
 }
 
-function create_staging_tables( load_id, schema_name, source_tables_prefix, 
-                                target_tables_prefix, tables_type, staging_tables){
+
+
+function create_source_tables(schema_name, tables_prefix, source_tables){   
+    source_tables.forEach(tbl => 
+        declare({
+            schema: schema_name,
+            name: `${tables_prefix}${tbl.name}`
+        })
+    )
+}
+
+function create_staging_tables(load_id, schema_name, source_tables_prefix, target_tables_prefix, tables_type, staging_tables){
     staging_tables.forEach( tbl => 
         publish(`${target_tables_prefix}${tbl.name}`, {
             type: tables_type,
@@ -182,19 +192,10 @@ function create_staging_tables( load_id, schema_name, source_tables_prefix,
     )
 }
 
-function create_source_tables(schema_name, tables_prefix, source_tables){   
-    source_tables.forEach(tbl => 
-        declare({
-            schema: schema_name,
-            name: `${tables_prefix}${tbl.name}`
-        })
-    )
-}
-
-function create_hubs_tables( source_tables_prefix, target_tables_prefix, table_type, schema_name, hub_tables){
+function create_hubs_tables(source_tables_prefix, hubs_tables_prefix, tables_type, schema_name, hub_tables){
     hub_tables.forEach( tbl => 
-        publish(`${target_tables_prefix}${tbl.name}`, {
-            type: table_type,
+        publish(`${hubs_tables_prefix}${tbl.name}`, {
+            type: tables_type,
             schema: schema_name,
             columns: models.bikes.columns_descriptions,
             description: `hub ${tbl.name} table`,
@@ -213,11 +214,11 @@ function create_hubs_tables( source_tables_prefix, target_tables_prefix, table_t
     )
 }
 
-function create_satellites_tables(target_tables_prefix, source_tables_prefix, hubs_tables_prefix, table_type, schema_name, sats_tables){
+function create_satellites_tables(source_tables_prefix, satellites_tables_prefix, hubs_tables_prefix, tables_type, schema_name, sats_tables){
 
     sats_tables.forEach( tbl => 
-        publish(`${target_tables_prefix}${tbl.name}`, {
-            type: table_type,
+        publish(`${satellites_tables_prefix}${tbl.name}`, {
+            type: tables_type,
             schema: schema_name,
             columns: tbl.columns_descriptions,
             description: `Satellite ${tbl.name} table`,
@@ -238,10 +239,10 @@ function create_satellites_tables(target_tables_prefix, source_tables_prefix, hu
 
 }
 
-function create_links_tables (source_tables_prefix, hubs_tables_prefix, target_tables_prefix, table_type, schema_name, links_tables){
+function create_links_tables (source_tables_prefix, hubs_tables_prefix, links_tables_prefix, tables_type, schema_name, links_tables){
     links_tables.forEach( lnk => 
-    publish(`${target_tables_prefix}${lnk.hub1.name}_${lnk.hub2.name}`, {
-        type: table_type,
+    publish(`${links_tables_prefix}${lnk.hub1.name}_${lnk.hub2.name}`, {
+        type: tables_type,
         schema: schema_name,
         description: `Link for ${lnk.hub1.name} ${lnk.hub2.name} table`,
         uniqueKey: [`${lnk.hub1.name}${lnk.hub2.name}_hash_id` , "hash_diff"],
@@ -262,6 +263,29 @@ function create_links_tables (source_tables_prefix, hubs_tables_prefix, target_t
         }
     `)
     )
+}
+
+function create_data_vault_from_model(
+    load_id,
+    source_schema_name,
+    stage_schema_name,
+    datavualt_schema_name,
+    source_tables_prefix,
+    stage_tables_prefix,
+    hubs_tables_prefix,
+    satellites_tables_prefix,
+    links_tables_prefix,
+    tables_type,
+    models,
+    links
+){
+
+    create_source_tables(source_schema_name, source_tables_prefix, models)
+    create_staging_tables(load_id, stage_schema_name, source_tables_prefix, stage_tables_prefix, tables_type, models)
+    create_hubs_tables(stage_tables_prefix, hubs_tables_prefix, tables_type, datavualt_schema_name, models)
+    create_satellites_tables(stage_tables_prefix, satellites_tables_prefix ,hubs_tables_prefix, tables_type, datavualt_schema_name, models)
+    create_links_tables(stage_tables_prefix, hubs_tables_prefix, links_tables_prefix, tables_type, datavualt_schema_name, links)
+    
 }
 
 module.exports = {

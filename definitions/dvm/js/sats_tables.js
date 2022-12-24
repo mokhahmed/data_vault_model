@@ -6,8 +6,8 @@ schema_name = "citibike_dvm"
 sats_tables = models.get_all()
 
 dvform.create_satellites_tables(
-    target_tables_prefix, 
     source_tables_prefix, 
+    target_tables_prefix, 
     hubs_tables_prefix,
     table_type,
     schema_name, 
