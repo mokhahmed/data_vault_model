@@ -3,13 +3,18 @@ config {
   type: "table",
   schema: "dvm",
   name: "sat_users",
-  columns: dv_models.users_model_doc,
+  columns: models.users.columns_descriptions,
   description: "satellite users table",
   uniqueKey: ["user_hash_id", "hash_diff"],
   tags: ["data-vault"]
 }
 
 ${
-    dvm.get_sat( dv_models.users_model, ref("src_users"), ref("hub_users"), "user_hash_id")
+    dvform.get_sat( 
+      models.users.columns, 
+      ref("src_users"), 
+      ref("hub_users"), 
+      "user_hash_id"
+    )
 }
 

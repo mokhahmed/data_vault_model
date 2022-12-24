@@ -3,12 +3,16 @@ config {
   type: "table",
   schema: "dvm",
   name: "hub_users",
-  columns: dv_models.users_model_doc,
+  columns: models.users.columns_descriptions,
   description: "hub users table",
   uniqueKey: ["user_hash_id"],
   tags: ["data-vault"]
 }
 
 ${
-    dvm.get_hub(dv_models.users_model, ref("src_users"), "user_hash_id")
+    dvform.get_hub(
+      models.users.columns, 
+      ref("src_users"), 
+      "user_hash_id"
+    )
 }

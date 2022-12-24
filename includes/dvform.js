@@ -146,46 +146,95 @@ function get_landing_files(source_table_name){
     `
 }
 
-function get_stage_table(job_id, table_name, table_model){
+function get_stage_table(load_id, table_name, table_model){
    cols = get_transformed_cols(table_model)
    return ` 
-    select
-       '${job_id}' as job_id,
-       current_timestamp() as load_time,
-       _file_name as file_name,
-       ${cols}
-    from ${table_name}
+        select
+        '${load_id}' as load_id,
+        current_timestamp() as load_time,
+        _file_name as file_name,
+        ${cols}
+        from ${table_name}
     `
 }
 
-function create_staging_tables(job_id, staging_tables){
-
+function create_staging_tables( load_id, schema_name, source_tables_prefix, 
+                                target_tables_prefix, tables_type, staging_tables){
     staging_tables.forEach( tbl => 
-        publish(tbl.target, {
-            type: "incremental",
-            schema: tbl.schema_name,
-            description: `Cleaned up data for  ${tbl.target} data source`,
-            columns: tbl.model_doc,
+        publish(`${target_tables_prefix}${tbl.name}`, {
+            type: tables_type,
+            schema: schema_name,
+            description: `Cleaned up data for ${target_tables_prefix}_${tbl.name} data source`,
+            columns: tbl.columns_descriptions,
             tags: ["stage"],
             bigquery: {
             partitionBy: "DATE(load_time)",
-            clusterBy: ["job_id"]
-            }
-        }).query(ctx => `
+            clusterBy: ["load_id"]
+        }}).query(ctx => `
             ${ 
-            dvm.get_stage_table(job_id, ctx.ref(tbl.source), tbl.model)
-            } `
-        )
+                dvform.get_stage_table(
+                    load_id, 
+                    ctx.ref(`${source_tables_prefix}${tbl.name}`), 
+                    tbl.columns
+                )
+            }
+        `)
     )
-
 }
 
-function create_src_tables(source_tables){
-    source_tables.forEach(tbl => declare({
-      schema: tbl.schema,
-      name: tbl.name
-    })
-  );
+function create_source_tables(schema_name, tables_prefix, source_tables){   
+    source_tables.forEach(tbl => 
+        declare({
+            schema: schema_name,
+            name: `${tables_prefix}_${tbl.name}`
+        })
+    )
+}
+
+function create_hubs_tables( source_tables_prefix, target_tables_prefix, table_type, schema_name, hub_tables){
+    hub_tables.forEach( tbl => 
+        publish(`${target_tables_prefix}${tbl.name}`, {
+            type: table_type,
+            schema: schema_name,
+            columns: models.bikes.columns_descriptions,
+            description: `hub ${tbl.name} table`,
+            uniqueKey: [`${tbl.name}_hash_id`],
+            tags: ["data-vault", "hubs"]
+        })
+        .query(ctx => `
+            ${ 
+                dvform.get_hub(
+                    tbl.columns,
+                    ctx.ref(`${source_tables_prefix}${tbl.name}`),
+                    `${tbl.name}_hash_id`
+                )
+            }
+        `)
+    )
+}
+
+function create_satellites_tables(target_tables_prefix, source_tables_prefix, hubs_tables_prefix, table_type, schema_name, sats_tables){
+
+    sats_tables.forEach( tbl => 
+        publish(`${target_tables_prefix}${tbl.name}`, {
+            type: table_type,
+            schema: schema_name,
+            columns: tbl.columns_descriptions,
+            description: `Satellite ${tbl.name} table`,
+            uniqueKey: [`${tbl.name}_hash_id` , "hash_diff"],
+            tags: ["data-vault", "sats"]
+        })
+        .query(ctx => `
+            ${ 
+                dvform.get_sat( 
+                    tbl.columns, 
+                    ctx.ref(`${source_tables_prefix}${tbl.name}`), 
+                    ctx.ref(`${hubs_tables_prefix}${tbl.name}`), 
+                    `${tbl.name}_hash_id`
+                )
+            }
+        `)
+    )  
 
 }
 
@@ -200,5 +249,7 @@ module.exports = {
   get_sat,
   get_link,
   create_staging_tables,
-  create_src_tables
+  create_source_tables,
+  create_hubs_tables,
+  create_satellites_tables
 };

@@ -3,7 +3,7 @@ config {
   schema: "stg_citibike",
   name: "stg_users",
   description: "Cleaned up data for users data source",
-  columns: dv_models.users_model_doc,
+  columns: models.users.columns_descriptions,
   tags: ["stage"],
    bigquery: {
     partitionBy: "DATE(load_time)",
@@ -14,5 +14,5 @@ config {
 
 
 ${
-  dvm.get_stage_table("job_id_1", ref("src_users"), dv_models.users_model)
+  dvform.get_stage_table("job_id_1", ref("src_users"), models.users.columns)
 }

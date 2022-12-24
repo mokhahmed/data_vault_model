@@ -5,7 +5,7 @@
   "defaultDatabase": "ma-sabre-sandbox-01",
   "defaultLocation": "US",
   "vars": {
-    "jobId": ""
+    "load_id": ""
   }
 }
     

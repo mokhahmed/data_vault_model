@@ -8,9 +8,9 @@ config {
 }
 
 ${
-    dvm.get_link(
-        dv_models.bikes_model,
-        dv_models.trips_model,
+    dvform.get_link(
+        models.bikes.columns,
+        models.trips.columns,
         ref("src_trips"),
         ref("hub_bikes"),
         ref("hub_trips"),

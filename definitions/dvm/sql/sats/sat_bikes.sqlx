@@ -3,13 +3,18 @@ config {
   type: "table",
   schema: "dvm",
   name: "sat_bikes",
-  columns: dv_models.bikes_model_doc,
+  columns: models.bikes.columns_descriptions,
   description: "satellite bikes table",
   uniqueKey: ["bike_hash_id", "hash_diff"],
   tags: ["data-vault"]
 }
 
 ${
-    dvm.get_sat( dv_models.bikes_model, ref("src_bikes"), ref("hub_bikes"), "bike_hash_id")
+    dvform.get_sat( 
+      models.bikes.columns, 
+      ref("src_bikes"), 
+      ref("hub_bikes"), 
+      "bike_hash_id"
+    )
 }
 

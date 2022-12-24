@@ -1,4 +1,4 @@
-var users_model =  [
+var users_columns =  [
   {
     "source_column_name": "user_id",
     "source_data_type": "integer",
@@ -51,10 +51,10 @@ var users_model =  [
   },
 ]
 
-var users_model_doc  = {}
-users_model.forEach(el => { users_model_doc[el.target_column_name+""] = el.description});
+var users_columns_descriptions  = {}
+users_columns.forEach(el => { users_columns_descriptions[el.target_column_name+""] = el.description});
 
-var bikes_model = [
+var bikes_columns = [
   {
     "source_column_name": "bike_id",
     "source_data_type": "integer",
@@ -77,10 +77,10 @@ var bikes_model = [
   }
 ]
 
-var bikes_model_doc  = {}
-bikes_model.forEach(el => { bikes_model_doc[el.target_column_name+""] = el.description});
+var bikes_columns_descriptions  = {}
+bikes_columns.forEach(el => { bikes_columns_descriptions[el.target_column_name+""] = el.description});
 
-var trips_model = [
+var trips_columns= [
   {
     "source_column_name": "bike_id",
     "source_data_type": "integer",
@@ -153,10 +153,10 @@ var trips_model = [
   }
 ]
 
-var trips_model_doc  = {}
-trips_model.forEach(el => { trips_model_doc[el.target_column_name+""] = el.description});
+var trips_columns_descriptions  = {}
+trips_columns.forEach(el => { trips_columns_descriptions[el.target_column_name+""] = el.description});
 
-var stations_model =  [
+var stations_columns =  [
  {
     "source_column_name": "station_id",
     "source_data_type": "integer",
@@ -249,16 +249,41 @@ var stations_model =  [
   },
 ]
 
-var stations_model_doc  = {}
-stations_model.forEach(el => { stations_model_doc[el.target_column_name+""] = el.description});
+var stations_columns_descriptions  = {}
+stations_columns.forEach(el => { stations_columns_descriptions[el.target_column_name+""] = el.description});
+
+var users = {
+  "name": "users",
+  "columns": users_columns,
+  "columns_descriptions": users_columns_descriptions
+}
+
+var bikes = {
+  "name": "bikes",
+  "columns": bikes_columns,
+  "columns_descriptions": bikes_columns_descriptions
+}
+
+var trips = {
+  "name": "trips",
+  "columns": trips_columns,
+  "columns_descriptions": trips_columns_descriptions
+}
+
+var stations = {
+  "name": "stations",
+  "columns": stations_columns,
+  "columns_descriptions": stations_columns_descriptions
+}
+
+function get_all(){
+  return [stations, bikes, trips, users] 
+}
 
 module.exports = {
-  users_model,
-  users_model_doc,
-  bikes_model,
-  bikes_model_doc,
-  trips_model,
-  trips_model_doc,
-  stations_model,
-  stations_model_doc
+  stations,
+  bikes,
+  trips,
+  users,
+  get_all
 }

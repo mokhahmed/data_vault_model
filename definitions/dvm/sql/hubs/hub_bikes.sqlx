@@ -3,12 +3,16 @@ config {
   type: "table",
   schema: "dvm",
   name: "hub_bikes",
-  columns: dv_models.bikes_model_doc,
+  columns: models.bikes.columns_descriptions,
   description: "hub bikes table",
   uniqueKey: ["bike_hash_id"],
   tags: ["data-vault"]
 }
 
 ${
-    dvm.get_hub(dv_models.bikes_model,ref("src_bikes"),"bike_hash_id")
+    dvform.get_hub(
+      models.bikes.columns,
+      ref("src_bikes"),
+      "bike_hash_id"
+    )
 }
