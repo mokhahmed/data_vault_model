@@ -197,7 +197,7 @@ function create_hubs_tables(source_tables_prefix, hubs_tables_prefix, tables_typ
         publish(`${hubs_tables_prefix}${tbl.name}`, {
             type: tables_type,
             schema: schema_name,
-            columns: models.bikes.columns_descriptions,
+            columns: tbl.columns_descriptions,
             description: `hub ${tbl.name} table`,
             uniqueKey: [`${tbl.name}_hash_id`],
             tags: ["data-vault", "hubs"]
